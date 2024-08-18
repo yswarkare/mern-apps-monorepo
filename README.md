@@ -1,2 +1,3 @@
-# react-projects-monorepo
-React Projects Monorepo
+# MERN Projects Monorepo
+
+MERN Stack Projects Monorepo

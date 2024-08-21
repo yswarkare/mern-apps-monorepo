@@ -37,7 +37,10 @@ const InputsUi = ({ label = '', id = 'input-field', icon, placeholder = '', labe
         {type === 'password' &&
           <IconsContainer iconClass={iconClass} Icon={showPassword ? EyeSlash : Eye} position={position} onClick={() => { onShowPassword() }} />
         }
-        <input type={showPassword ? 'text' : type} id={id} className={`${position === 'left' ? 'pl-10' : position === 'right' ? 'pr-10' : ""} w-full rounded-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${inputClass}`} placeholder={placeholder} onChange={onChange} value={value} />
+        <input type={showPassword ? 'text' : type} id={id} className={`w-full rounded-lg border text-gray-900 border-gray-300 dark:border-gray-600 block flex-1 min-w-0 w-full text-sm p-2.5 dark:placeholder-gray-400 dark:text-white ${error.error == true ?
+            'bg-red-300 dark:bg-red-900 focus:ring-red-500 focus:border-red-500 dark:focus:ring-red-500 dark:focus:border-red-500'
+            : 'bg-gray-50 dark:bg-gray-700 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500'} ${inputClass} ${
+            position === 'left' ? 'pl-10' : position === 'right' ? 'pr-10' : ""} `} placeholder={placeholder} onChange={onChange} value={value} />
       </label>
       {
         error.error &&

@@ -32,3 +32,14 @@ Installed dependencies are
 - morgan
 - jsonwebtoken
 - mongoose
+
+to add types of installed dependencies use following command
+
+pnpm add -D @types/express @types/multer @types/morgan @types/cors @types/bcrypt @types/jsonwebtoken
+
+- @types/express
+- @types/multer
+- @types/morgan
+- @types/cors
+- @types/bcrypt
+- @types/jsonwebtoken

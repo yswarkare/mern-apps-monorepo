@@ -2,19 +2,20 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import multer from 'multer';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { port, mongoUri } from './config/index.js';
+import http from 'http';
+import authRoutes from './routes/auth.js'
+import { register } from './controllers/auth.js';
 
 /* configurations */
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-dotenv.config();
 
 const app = express();
 
@@ -40,4 +41,44 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
+/** routes with files */
 
+app.post('/auth/register', upload.single('picture'), register);
+
+
+/* routes */
+
+app.use("/auth", authRoutes);
+
+
+
+/* mongoose setup */
+
+async function connectToDB() {
+	try {
+		const connection = await mongoose.connect(mongoUri);
+		console.log('connected to MongoDB');
+		return connection;
+	} catch (error) {
+		console.log('failed to connect to MongoDB');
+		console.error(error);
+		throw error;
+	}
+}
+
+/** start server */
+
+async function startServer() {
+	try {
+		await connectToDB();
+		const server = http.createServer(app);
+		server.listen(port, () => {
+			console.log(`server started on port ${port}`);
+		});
+	} catch (error) {
+		console.log(`failed to start server`);
+		console.error(error);
+	}
+}
+
+startServer();

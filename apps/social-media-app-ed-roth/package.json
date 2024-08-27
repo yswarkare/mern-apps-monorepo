@@ -1,0 +1,21 @@
+{
+  "name": "social-media-app-ed-roth",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "client:dev": "cd client && pnpm dev",
+    "client:build": "cd client && pnpm build",
+    "client:serv": "cd client && serve -s dist -l 5176",
+    "server:dev": "cd server && pnpm dev",
+    "server:serv": "cd server && pnpm start",
+    "dev": "concurrently \"pnpm server:dev\" \"pnpm client:dev\"",
+    "serv": "concurrently \"pnpm server:serv\" \"pnpm client:serv\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

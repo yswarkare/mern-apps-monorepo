@@ -1,0 +1,29 @@
+:root,
+html,
+body {
+	font-family: 'Karla', 'Poppins', Verdana, Geneva, Tahoma, sans-serif;
+	background-color: #111;
+	color: #f9f9f9;
+	font-size: 16px;
+	font-weight: 400;
+}
+#root,
+.app {
+	height: 100%;
+	width: 100%;
+}
+
+h1 {
+	font-family: 'Acme', 'Gabriela Regular', 'Salsa', 'Poppins', Verdana, Geneva, Tahoma, sans-serif;
+	background-color: #111;
+}
+
+.font-karla {
+	font-family: 'Karla', 'Poppins', Verdana, Geneva, Tahoma, sans-serif;
+	font-weight: 300;
+}
+
+.font-secondary {
+	font-family: 'Signika Negative', 'Karla', 'Poppins', Verdana, Geneva, Tahoma, sans-serif;
+	font-weight: 300;
+}

@@ -1,6 +1,6 @@
 import { lazy } from 'react';
 
-const DefaultPage = lazy(() => import('../layouts/default'));
+const DefaultPage = lazy(() => import('../layouts/DefaultPage'));
 const HomePage = lazy(() => import('../scenes/homePage'));
 const LoginPage = lazy(() => import('../scenes/loginPage'));
 const ProfilePage = lazy(() => import('../scenes/profilePage'));

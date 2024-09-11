@@ -4,7 +4,6 @@ import PageLoader from '../components/loaders/PageLoader';
 
 const DefaultPage = () => {	return (
 		<div className='app'>
-			default page
 			<main>
 				<Suspense fallback={<PageLoader />}>
 					<Outlet />

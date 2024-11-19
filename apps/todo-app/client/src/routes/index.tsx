@@ -1,5 +1,7 @@
 import { lazy } from 'react';
 
+
+const Errors = lazy(() => import('../components/errors/Errors'));
 const DefaultLayout = lazy(() => import('../layout/DefaultLayout'));
 const LogIn = lazy(() => import('../pages/Login'));
 const SignUp = lazy(() => import('../pages/SignUp'));
@@ -43,4 +45,8 @@ export const routes = [
     path: '/sign-up',
     element: <SignUp />
   },
+  {
+    path: '/*',
+    element: <Errors errors={["404 Page not found!"]} />
+  }
 ]

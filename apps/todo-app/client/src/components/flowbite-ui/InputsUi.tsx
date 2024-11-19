@@ -44,7 +44,7 @@ const InputsUi = ({ label = '', id = 'input-field', icon, placeholder = '', labe
       </label>
       {
         error.error &&
-        <span className="text-sm text-red-500 text-wrap">{error.message}</span>
+        <h6 className="text-red-500 text-wrap">{error.message}</h6>
       }
     </fieldset>
 

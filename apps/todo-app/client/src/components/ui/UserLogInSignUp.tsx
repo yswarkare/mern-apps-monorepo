@@ -78,7 +78,7 @@ const UserLogInSignUp = ({ page = 'sign-up', title = '', link = '' }) => {
   };
 
   return (
-    <div className="w-full flex flex-col justify-center items-center">
+    <div className="w-full card magic magictime slideDownReturn flex flex-col justify-center items-center">
       <div className="w-full py-6 flex flex-row justify-center items center">
         <h2 className="font-bold text-3xl">{title}</h2>
       </div>

@@ -10,13 +10,13 @@ const activeNavItemClass = `block py-2 px-3 text-white bg-blue-700 rounded md:bg
 
 const inactiveNavItemClass = `block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700`
 
-const navItems = [{ path: '/', name: 'Home' }, { path: '/todos', name: 'Todos' }, { path: '/user-dashboard', name: 'User Dashboard' }, { path: '/about', name: 'About' },];
+const navItems = [{ path: '/', name: 'Home', access: true }, { path: '/todos', name: 'Todos', access: false }, { path: '/user-dashboard', name: 'User Dashboard', access: false }, { path: '/about', name: 'About', access: true },]
 
 export default function Navbar() {
   const matches = useMatches();
   const location = matches[1];
   const [selected, setSelected] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   useEffect(() => {
     console.log({ location, matches });
@@ -25,6 +25,10 @@ export default function Navbar() {
     }
   }, [location.pathname]);
 
+
+  const handleSignOut = () => {
+    setIsLoggedIn(false)
+  }
 
   return (<div className="w-full flex flex-col justify-start">
     <nav className="bg-white border-gray-200 dark:bg-gray-900">
@@ -37,12 +41,15 @@ export default function Navbar() {
                   <span className="sr-only">Open user menu</span>
                   <UserIcon className="w-8 h-8 rounded-full" />
                 </button>
-                <div className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600" id="user-dropdown">
+                <div className="z-50 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600" id="user-dropdown">
                   <div className="px-4 py-3">
                     <span className="block text-sm text-gray-900 dark:text-white">Bonnie Green</span>
                     <span className="block text-sm  text-gray-500 truncate dark:text-gray-400">name@flowbite.com</span>
                   </div>
                   <ul className="py-2" aria-labelledby="user-menu-button">
+                    <li>
+                      <a href="#" className={userItemClass}>Profile</a>
+                    </li>
                     <li>
                       <a href="#" className={userItemClass}>Dashboard</a>
                     </li>
@@ -50,10 +57,7 @@ export default function Navbar() {
                       <a href="#" className={userItemClass}>Settings</a>
                     </li>
                     <li>
-                      <a href="#" className={userItemClass}>Earnings</a>
-                    </li>
-                    <li>
-                      <a href="#" className={userItemClass}>Sign out</a>
+                      <a href="#" className={userItemClass} onClick={() => handleSignOut()}>Sign out</a>
                     </li>
                   </ul>
                 </div>
@@ -76,7 +80,7 @@ export default function Navbar() {
         <div className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-user">
           <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
             {
-              navItems.map(({ path, name }) => (
+              navItems.map(({ path, name, access }) => (access || isLoggedIn) && (
                 <li key={path}>
                   <Link to={path} className={path === selected ? activeNavItemClass : inactiveNavItemClass} aria-current="page">{name}</Link>
                 </li>

@@ -18,7 +18,7 @@ function Header() {
       <ThemeDropdown themes={themes} />
       {
         headerItems.map(({ label, path }) => (
-          <Link to={path} className={`w-full hover:bg-secondary`}>{label}</Link>
+          <Link to={path} key={path} className={`w-full hover:bg-secondary`}>{label}</Link>
         ))
       }
       <SelectTheme themes={['dark', 'light', 'altDark', 'cupcake', 'darkAlt', "bumblebee", ...themes]} />

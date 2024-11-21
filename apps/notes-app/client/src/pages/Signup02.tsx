@@ -1,5 +1,7 @@
+import { InputUi } from "yw-daisyui";
 import { object, ref, string } from 'yup'
-import SignUpOrLogin from "../components/SignUpOrLogIn";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const userProps = {
   firstName: "First Name",
@@ -31,15 +33,35 @@ const userSchema = object({
 })
 
 const Signup = () => {
+  const { control, register, handleSubmit, formState: { isValid, errors, touchedFields: touched, }, reset } = useForm({
+    resolver: yupResolver(userSchema),
+  });
+
+  const submitHandler = (data) => {
+    console.log(data)
+    if (isValid) {
+      console.log({ isValid, data })
+    }
+  }
 
   return (
     <div className="w-full pt-8 flex flex-col justify-center items-center">
-      <SignUpOrLogin
-        title={"Sign Up"}
-        url={'http://localhost:5000/api/user/sign-up'}
-        userProps={userProps}
-        userSchema={userSchema}
-      ></SignUpOrLogin>
+      <h1 className="p-8 text-xl">Sign Up</h1>
+      <form className="w-[60%] gap-3 flex flex-col" onSubmit={handleSubmit(submitHandler)}>
+        {
+          Object.entries(userProps).map(([key, value]) => (
+            <Controller
+              name={key}
+              control={control}
+              render={({ field }) => <InputUi type={key} id={key} label={value} position="left" key={key} error={(touched?.[key] && errors?.[key]?.message)} {...field} />}
+            />
+
+          ))
+        }
+        <div className="">
+          <button className="btn btn-primary" title="sign-up" type="submit">Sign Up</button>
+        </div>
+      </form>
     </div>
   );
 }

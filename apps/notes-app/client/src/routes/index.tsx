@@ -8,7 +8,6 @@ const About = lazy(() => import("../pages/About"));
 const Login = lazy(() => import("../pages/Login"));
 const Signup = lazy(() => import("../pages/Signup"));
 
-
 const routes = [{
   path: path.base,
   element: <DefaultLayout />,

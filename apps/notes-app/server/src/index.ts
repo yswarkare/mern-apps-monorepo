@@ -1,12 +1,19 @@
-import express from 'express';
-import usersRouter from './routes/users';
+import http from 'http';
+import { port } from './config/index';
+// import connectToDb from './db';
+import createApp from './app';
 
-const app = express();
+const startServer = async () => {
+	try {
+		// await connectToDb();
+		http.createServer(createApp()).listen(port);
+		console.log('server started successfully!');
+		console.log('app is running on port = ' + port);
+	} catch (err) {
+		console.log({ err });
+		console.error(err);
+		throw err;
+	}
+};
 
-const PORT = 5000;
-
-app.use("/api/users", usersRouter);
-
-app.listen(PORT, ()=>{
-  console.log(`running on port ${PORT}`)
-})
+startServer();

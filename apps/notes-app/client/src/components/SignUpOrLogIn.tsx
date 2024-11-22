@@ -4,6 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { BlocksShuffle, DotsMove } from "yw-icons";
 import useApiCall from "../hooks/useApiCall";
 import { AnyObject, ObjectSchema } from "yup";
+import AuthService from "../services/auth.service";
 
 type Props = {
   title: string
@@ -16,7 +17,7 @@ const SignUpOrLogin = ({ title, userProps, userSchema, url }: Props) => {
   const { control, handleSubmit, formState: { isValid, errors, touchedFields: touched, }, reset } = useForm({
     resolver: yupResolver(userSchema),
   });
-  const { error, loading, value, callApi } = useApiCall()
+  const { error, loading, value, callApiFunction } = useApiCall()
 
   const submitHandler = async (data) => {
     try {
@@ -25,12 +26,12 @@ const SignUpOrLogin = ({ title, userProps, userSchema, url }: Props) => {
         console.log({ isValid, data })
         if (url) {
           if (data?.confirmPassword) delete data.confirmPassword
-          await callApi(url, {
-            method: "POST",
-            credentials: 'include',
-            headers: { "Content-Type": 'application/json' },
-            body: JSON.stringify(data), json: true,
-          })
+          if (title === 'Sign Up') {
+            await callApiFunction(AuthService.signUp(), data)
+          }
+          if (title === 'Log In') {
+            await callApiFunction(AuthService.logIn(), data)
+          }
           console.log(value)
           // reset()
         }

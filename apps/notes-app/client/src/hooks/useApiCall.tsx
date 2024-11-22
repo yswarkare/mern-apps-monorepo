@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { getCookie } from 'yw-hooks';
 
 const myHeaders = new Headers();
 myHeaders.append("Content-Type", "application/json");
@@ -16,8 +15,6 @@ function useApiCall() {
       setValue(undefined);
       const res: Response = await fetch(url, options);
       const data = await res.json();
-      const bearerToken = getCookie("bearerToken")
-      console.log({ bearerToken })
       setValue(data);
     } catch (err) {
       setError(err);
@@ -26,7 +23,26 @@ function useApiCall() {
     }
   }
 
-  return { loading, error, value, callApi }
+  async function callApiFunction(func: (arg0: object) => Response | PromiseLike<Response>, body: object) {
+    try {
+      setLoading(true);
+      setError(undefined);
+      setValue(undefined);
+      const res: Response = await func(body);
+      console.log({ res })
+      const cookies = res.headers.getSetCookie()
+      console.log({ cookies })
+      const data = await res.json();
+      console.log({ data })
+      setValue(data);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return { loading, error, value, callApiFunction, callApi }
 }
 
 export default useApiCall;

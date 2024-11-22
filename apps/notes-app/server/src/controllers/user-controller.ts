@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { CreateUserDto } from '../db/user.dto';
+import { CreateUserDto, UserEntity } from '../db/user.dto';
 import { validateCreateUserDto, validateUserDto } from '../utils/user.utils';
 import { createNewUser, doesUserExists, getUserByEmail, getUserByUsername, getUserByUsernameOrEmailOrMobile } from '../helpers/user.helper';
 import { comparePassword, hashPassword } from '../utils/bcryptjs';
@@ -32,7 +32,7 @@ export const signUpUser = async (req: Request<{}, {}, CreateUserDto>, res: Respo
 		const newUser = await createNewUser(user);
 
 		/* create jwt token */
-		const tokenInfo = createToken(user);
+		const tokenInfo = createToken(newUser);
 
 		res.setHeader('Authorization', tokenInfo.bearerToken);
 		res.cookie('bearerToken', tokenInfo.bearerToken);
@@ -62,17 +62,19 @@ export const loginUser = async (req: Request<{}, {}, CreateUserDto>, res: Respon
 		if (!isValid) return res.status(401).json({ success: false, message: errors });
 
 		/* get user */
-		let userInfo;
-		if (user?.email) {
-			userInfo = await getUserByEmail(user.email);
-		} else if (user?.username) {
-			userInfo = await getUserByUsernameOrEmailOrMobile(user.username);
+		let userInfo: UserEntity;
+		try {			
+			if (user?.email) {
+				userInfo = await getUserByEmail(user.email);
+			} else if (user?.username) {
+				userInfo = await getUserByUsernameOrEmailOrMobile(user.username);
+			}
+		} catch (error) {
+			console.log(error)
+			return res.status(401).json({ success: false, message: `user doesn't exists.` });
 		}
 
-		/* check if user already exists */
-		if (!userInfo) return res.status(401).json({ success: false, message: `user doesn't exists.` });
-
-		if (userInfo && typeof userInfo != 'boolean' && userInfo?.password) {
+		if (userInfo! && typeof userInfo != 'boolean' && userInfo?.password) {
 			/* compare password using bcryptjs. */
 			let { success, message } = await comparePassword(user.password, userInfo.password);
 			if (success === false) {
@@ -81,7 +83,7 @@ export const loginUser = async (req: Request<{}, {}, CreateUserDto>, res: Respon
 		}
 
 		/* create jwt token */
-		const tokenInfo = createToken(user);
+		const tokenInfo = createToken(userInfo!);
 
 		res.setHeader('Authorization', tokenInfo.bearerToken);
 		res.cookie('bearerToken', tokenInfo.bearerToken);

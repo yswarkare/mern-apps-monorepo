@@ -1,3 +1,5 @@
+import { users } from "./schema/users";
+
 export interface UserDto {
 	[index: string]: string;
 	firstName: string;
@@ -16,3 +18,5 @@ export type CreateUserDto = {
 	mobile: string;
 	password: string;
 };
+
+export type UserEntity = typeof users.$inferInsert

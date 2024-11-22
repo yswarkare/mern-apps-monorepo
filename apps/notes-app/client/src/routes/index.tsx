@@ -1,6 +1,7 @@
 import { lazy } from "react";
 import path from "./path";
 
+const AuthRouter = lazy(() => import("../components/AuthRouter"));
 const DefaultLayout = lazy(() => import("../layouts/DefaultLayout"));
 const Home = lazy(() => import("../pages/Home"));
 const Notebooks = lazy(() => import("../pages/Notebooks"));
@@ -13,20 +14,22 @@ const routes = [{
   element: <DefaultLayout />,
   children: [{
     path: path.home,
-    element: <Home />,
+    element: <AuthRouter><Home /></AuthRouter>,
   }, {
     path: path.notebooks,
-    element: <Notebooks />,
+    element: <AuthRouter><Notebooks /></AuthRouter>,
   }, {
     path: path.about,
-    element: <About />,
-  }, {
-    path: path.login,
-    element: <Login />,
-  }, {
-    path: path.signup,
-    element: <Signup />,
-  },]
+    element: <AuthRouter><About /></AuthRouter>,
+  }]
+},
+{
+  path: path.login,
+  element: <Login />,
+},
+{
+  path: path.signup,
+  element: <Signup />,
 },
 {
   path: "/*",

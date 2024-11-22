@@ -1,7 +1,7 @@
 import { eq, or } from 'drizzle-orm';
 import db from '../db';
 import { users } from '../db/schema/users';
-import { CreateUserDto, UserDto } from '../db/user.dto';
+import { CreateUserDto, UserDto, UserEntity } from '../db/user.dto';
 import { v4 as uuidV4 } from 'uuid';
 
 export const doesUserExists = async (user: UserDto): Promise<boolean | undefined> => {
@@ -25,12 +25,16 @@ export const getUserById = async (userId: string) => {
 	return foundUser[0];
 };
 
-export const getUserByEmail = async (email: string) => {
-	const foundUser = await db.select().from(users).where(eq(users.email, email));
-	if (!foundUser[0]) {
-		return false;
+export const getUserByEmail = async (email: string): Promise<UserEntity> => {
+	try {
+		const foundUser = await db.select().from(users).where(eq(users.email, email));
+		if (foundUser[0]) {
+			return foundUser[0];
+		}
+		throw new Error('User not round');
+	} catch (error) {
+		throw error;
 	}
-	return foundUser[0];
 };
 
 export const getUserByUsername = async (username: string) => {
@@ -41,22 +45,33 @@ export const getUserByUsername = async (username: string) => {
 	return foundUser[0];
 };
 
-export const getUserByUsernameOrEmailOrMobile = async (username: string) => {
-	const foundUser = await db
-		.select()
-		.from(users)
-		.where(or(eq(users.username, username), eq(users.email, username), eq(users.mobile, username)));
-	if (!foundUser[0]) {
-		return false;
+export const getUserByUsernameOrEmailOrMobile = async (username: string): Promise<UserEntity> => {
+	try {
+		const foundUser = await db
+			.select()
+			.from(users)
+			.where(or(eq(users.username, username), eq(users.email, username), eq(users.mobile, username)));
+		if (foundUser[0]) {
+			return foundUser[0];
+		}
+		throw new Error('User not round');
+	} catch (error) {
+		throw error;
 	}
-	return foundUser[0];
 };
 
-export const createNewUser = async (user: CreateUserDto) => {
-	type NewUser = typeof users.$inferInsert;
-	const newUser: NewUser = { ...user, id: uuidV4() };
-	const savedUser = await db.insert(users).values(newUser);
-	return savedUser;
+export const createNewUser = async (user: CreateUserDto): Promise<UserEntity> => {
+	try {
+		const newUser: UserEntity = { ...user, id: uuidV4() };
+		const savedUser = await db.insert(users).values(newUser);
+		if (savedUser) {
+			return newUser;
+		} else {
+			throw new Error('Failed to create new user.');
+		}
+	} catch (error) {
+		throw error;
+	}
 };
 
 export const doesUserAlreadyExists = async (user: CreateUserDto) => {
